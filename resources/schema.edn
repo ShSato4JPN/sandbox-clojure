@@ -1,0 +1,17 @@
+;; Lacinia のスキーマ定義 (EDN)
+;;
+;; GraphQL の SDL (type Query { hello: String }) を EDN で書いたもの。
+;; :resolve に書いたキーワードは、実際の関数と gql.schema で紐付ける。
+{:queries
+ {:hello
+  {:type        String
+   :description "引数なしの動作確認用クエリ。固定文字列を返す。"
+   :resolve     :query/hello}
+
+  :greet
+  {:type        String
+   :description "引数ありの動作確認用クエリ。name を受け取って挨拶を返す。"
+   :args        {:name {:type          String
+                        :default-value "world"
+                        :description   "挨拶する相手の名前"}}
+   :resolve     :query/greet}}}
