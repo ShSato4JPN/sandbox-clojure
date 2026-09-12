@@ -1,0 +1,24 @@
+# 学習用の MySQL。認証情報はローカル前提でそのまま書いている。
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: sandbox-clojure-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: todo
+      MYSQL_USER: todo
+      MYSQL_PASSWORD: todopass
+    ports:
+      # ローカルに MySQL が入っていても衝突しないよう host 側は 3307 にする
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-utodo", "-ptodopass"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  mysql-data:
