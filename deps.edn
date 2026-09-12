@@ -6,6 +6,13 @@
          io.pedestal/pedestal.service     {:mvn/version "0.7.2"}
          io.pedestal/pedestal.jetty       {:mvn/version "0.7.2"}}
 
+ ;; lacinia-pedestal -> com.rpl/proxy-plus が依存する com.rpl/rama-shaded-asm は
+ ;; Maven Central / Clojars になく、Red Planet Labs の Nexus にしか無いため追加する
+ :mvn/repos
+ {"central"   {:url "https://repo1.maven.org/maven2/"}
+  "clojars"   {:url "https://repo.clojars.org/"}
+  "redplanetlabs" {:url "https://nexus.redplanetlabs.com/repository/maven-public-releases"}}
+
  :aliases
  {;; エディタ (VSCode/Calva, CIDER など) から繋ぐ用の nREPL
   :dev {:extra-deps {nrepl/nrepl       {:mvn/version "1.3.1"}
