@@ -2,7 +2,17 @@
 ;;
 ;; GraphQL の SDL (type Query { hello: String }) を EDN で書いたもの。
 ;; :resolve に書いたキーワードは、実際の関数と gql.schema で紐付ける。
-{:queries
+{:objects
+ {:Todo
+  {:description "TODO 1 件"
+   :fields
+   {:id        {:type (non-null Int)}
+    :title     {:type (non-null String)}
+    :done      {:type (non-null Boolean)}
+    :createdAt {:type String
+                :description "作成日時 (ISO-8601 形式の文字列)"}}}}
+
+ :queries
  {:hello
   {:type        String
    :description "引数なしの動作確認用クエリ。固定文字列を返す。"
@@ -14,4 +24,28 @@
    :args        {:name {:type          String
                         :default-value "world"
                         :description   "挨拶する相手の名前"}}
-   :resolve     :query/greet}}}
+   :resolve     :query/greet}
+
+  :todos
+  {:type        (non-null (list (non-null :Todo)))
+   :description "TODO を新しい順で全件返す。"
+   :resolve     :query/todos}}
+
+ :mutations
+ {:createTodo
+  {:type        :Todo
+   :description "TODO を 1 件追加する。"
+   :args        {:title {:type (non-null String)}}
+   :resolve     :mutation/create-todo}
+
+  :toggleTodo
+  {:type        :Todo
+   :description "TODO の done を反転する。"
+   :args        {:id {:type (non-null Int)}}
+   :resolve     :mutation/toggle-todo}
+
+  :deleteTodo
+  {:type        Boolean
+   :description "TODO を 1 件削除する。"
+   :args        {:id {:type (non-null Int)}}
+   :resolve     :mutation/delete-todo}}}
